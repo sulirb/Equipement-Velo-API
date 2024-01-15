@@ -22,11 +22,14 @@ route.post("/", auth, multer, optimizeImage, async (req, res) => {
 });
 
 route.get("/", async (req, res) => {
-  const articles = await Image.find().catch(() => {
-    throw new HttpError(401, {
-      message: "Erreur dans la récuperation des images",
+  const articles = await Image.find()
+    .sort({ createdAt: -1 })
+    .limit(1)
+    .catch(() => {
+      throw new HttpError(401, {
+        message: "Erreur dans la récuperation des images",
+      });
     });
-  });
   res.status(200).json(articles);
 });
 
