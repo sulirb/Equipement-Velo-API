@@ -4,7 +4,6 @@ let { PORT } = require("./managers/env.js");
 const http = require("http");
 
 if (!PORT) console.warn("PORT may be set in .env (default: 4000)");
-PORT = 80;
 
 app.set("port", PORT);
 const server = http.createServer(app);
