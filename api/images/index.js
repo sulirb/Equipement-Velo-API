@@ -9,14 +9,11 @@ let route = express.Router({ mergeParams: true });
 
 route.post("/", auth, multer, optimizeImage, async (req, res) => {
   const imageObject = req.body;
-  const imagePath = path.join(
-    process.cwd(),
-    "/images/content",
-    req.file.filename
-  );
   const image = new Image({
     ...imageObject,
-    file: `${req.protocol}://${req.get("host")}${imagePath}`,
+    file: `${req.protocol}://${req.get("host")}/images/content/${
+      req.file.filename
+    }`,
   });
   await image.save().catch(() => {
     throw new HttpError(400, { message: "Image non enregistré !" });
