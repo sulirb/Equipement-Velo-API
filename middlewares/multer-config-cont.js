@@ -8,11 +8,10 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, "images/content/");
+    callback(null, `${process.cwd()}/images/content/`);
   },
   filename: (req, file, callback) => {
     const title = req.body.title;
-    // Remplacez les espaces par des tirets et supprimez les caractères non alphanumériques
     const slug = title
       .toLowerCase()
       .replace(/[^a-zA-Z0-9 ]/g, "")
