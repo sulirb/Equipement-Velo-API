@@ -33,4 +33,13 @@ route.get("/", async (req, res) => {
   res.status(200).json(articles);
 });
 
+route.get("/list", async (req, res) => {
+  const articles = await Image.find().catch(() => {
+    throw new HttpError(401, {
+      message: "Erreur dans la récuperation des images",
+    });
+  });
+  res.status(200).json(articles);
+});
+
 module.exports = route;
