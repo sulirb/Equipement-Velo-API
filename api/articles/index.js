@@ -42,9 +42,7 @@ route.post("/", auth, multer, optimizeImage, async (req, res) => {
   const articleObject = req.body;
   const article = new Article({
     ...articleObject,
-    file: `${req.protocol}://${req.get("host")}/images/title/${
-      req.file.filename
-    }`,
+    file: `https://${req.get("host")}/images/title/${req.file.filename}`,
   });
   await article.save().catch(() => {
     throw new HttpError(400, { message: "Livre non enregistré !" });
