@@ -7,7 +7,19 @@ const auth = require("../../middlewares/auth.js");
 
 let route = express.Router({ mergeParams: true });
 
-route.get("/", async (req, res) => {
+route.get("/all", async (req, res) => {
+  const articles = await Article.find().sort({ createdAt: -1 });
+
+  if (!articles) {
+    throw new HttpError(404, {
+      message: "Erreur dans la récupération des articles",
+    });
+  }
+
+  res.status(200).json(articles);
+});
+
+route.get("/perPage", async (req, res) => {
   const page = req.query.page || 1; // Récupérez le numéro de la page depuis la requête (par défaut à la page 1)
   const perPage = req.query.perPage || 20; // Récupérez le nombre d'articles par page depuis la requête (par défaut à 20)
 
