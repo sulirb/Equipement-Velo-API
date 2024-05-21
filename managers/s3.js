@@ -20,7 +20,6 @@ function uploadFileImages(file) {
 
   const uploadParams = {
     Bucket: bucketName,
-    Folder: "images",
     Body: fileStream,
     Key: `titre-images/${file.filename}`,
     ContentType: file.mimetype,
@@ -38,7 +37,6 @@ function uploadFileContent(file) {
 
   const uploadParams = {
     Bucket: bucketName,
-    Folder: "images",
     Body: fileStream,
     Key: `content/${file.filename}`,
     ContentType: file.mimetype,

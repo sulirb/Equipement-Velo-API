@@ -61,39 +61,4 @@ route.get("/:key", (req, res) => {
   readStream.pipe(res);
 });
 
-/*route.post("/", auth, multer, optimizeImage, async (req, res) => {
-  const imageObject = req.body;
-  const image = new Image({
-    ...imageObject,
-    file: `${req.protocol}://${req.get("host")}/images/content/${
-      req.file.filename
-    }`,
-  });
-  await image.save().catch(() => {
-    throw new HttpError(400, { message: "Image non enregistré !" });
-  });
-  res.status(201).json({ message: "Image enregistré !" });
-});
-
-route.get("/", async (req, res) => {
-  const articles = await Image.find()
-    .sort({ createdAt: -1 })
-    .limit(1)
-    .catch(() => {
-      throw new HttpError(401, {
-        message: "Erreur dans la récuperation des images",
-      });
-    });
-  res.status(200).json(articles);
-});
-
-route.get("/list", async (req, res) => {
-  const articles = await Image.find().catch(() => {
-    throw new HttpError(401, {
-      message: "Erreur dans la récuperation des images",
-    });
-  });
-  res.status(200).json(articles);
-});*/
-
 module.exports = route;

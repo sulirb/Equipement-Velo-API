@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const cors = require("cors");
 require("express-async-errors");
 const morgan = require("morgan");
@@ -9,11 +10,10 @@ const { errorMiddleware } = require("./middlewares/error.js");
 
 const app = express();
 
+const mongoDatabase = process.env.MONGODB_NAME;
+
 mongoose
-  .connect(
-    "mongodb+srv://losc596:JEySrUJ7nUrOTLR@moncluster.qs7ap8b.mongodb.net/equipvelo?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(mongoDatabase, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch((error) => console.log("Connexion à MongoDB échouée !" + error));
 

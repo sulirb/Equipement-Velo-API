@@ -4,6 +4,10 @@ const Article = require("../../models/Article.js");
 const multer = require("../../middlewares/multer-config.js");
 const optimizeImage = require("../../middlewares/multer-sharp.js");
 const auth = require("../../middlewares/auth.js");
+const { uploadFileImages } = require("../../managers/s3.js");
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 
 let route = express.Router({ mergeParams: true });
 
@@ -121,5 +125,36 @@ route.post("/", auth, multer, optimizeImage, async (req, res) => {
   });
   res.status(201).json({ message: "Livre enregistré !" });
 });
+
+/*route.post("/", auth, multer, optimizeImage, async (req, res) => {
+  const articleObject = req.body;
+  const file = req.file;
+  const result = await uploadFileImages(file);
+  await unlinkFile(file.path);
+  console.log(result);
+  const description = req.body.description;
+  res.send({ imagePath: `/images/${result.Key}` });
+  const article = new Article({
+    ...articleObject,
+  });
+  await article.save().catch(() => {
+    throw new HttpError(400, { message: "Livre non enregistré !" });
+  });
+  res.status(201).json({ message: "Livre enregistré !" });
+});
+
+route.post("/", multer, optimizeImage, async (req, res) => {
+  const file = req.file;
+  console.log(file);
+
+  // apply filter
+  // resize
+
+  const result = await uploadFile(file);
+  await unlinkFile(file.path);
+  console.log(result);
+  const description = req.body.description;
+  res.send({ imagePath: `/images/${result.Key}` });
+});*/
 
 module.exports = route;
