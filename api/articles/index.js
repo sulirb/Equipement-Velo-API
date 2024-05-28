@@ -116,45 +116,23 @@ route.get("/perPage", async (req, res) => {
 
 route.post("/", auth, multer, optimizeImage, async (req, res) => {
   const articleObject = req.body;
-  const article = new Article({
-    ...articleObject,
-    file: `https://${req.get("host")}/images/title/${req.file.filename}`,
-  });
-  await article.save().catch(() => {
-    throw new HttpError(400, { message: "Livre non enregistré !" });
-  });
-  res.status(201).json({ message: "Livre enregistré !" });
-});
-
-/*route.post("/", auth, multer, optimizeImage, async (req, res) => {
-  const articleObject = req.body;
   const file = req.file;
   const result = await uploadFileImages(file);
   await unlinkFile(file.path);
   console.log(result);
+  const fileUrl = result.Location;
+
   const description = req.body.description;
-  res.send({ imagePath: `/images/${result.Key}` });
   const article = new Article({
     ...articleObject,
+    file: fileUrl,
+    imagePath: `/titre-images/${result.Key}`,
   });
+
   await article.save().catch(() => {
-    throw new HttpError(400, { message: "Livre non enregistré !" });
+    throw new HttpError(400, { message: "Article non enregistré !" });
   });
-  res.status(201).json({ message: "Livre enregistré !" });
+  res.status(201).json({ message: "Article enregistré !" });
 });
-
-route.post("/", multer, optimizeImage, async (req, res) => {
-  const file = req.file;
-  console.log(file);
-
-  // apply filter
-  // resize
-
-  const result = await uploadFile(file);
-  await unlinkFile(file.path);
-  console.log(result);
-  const description = req.body.description;
-  res.send({ imagePath: `/images/${result.Key}` });
-});*/
 
 module.exports = route;
