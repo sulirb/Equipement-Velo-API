@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
 const cors = require("cors");
 require("express-async-errors");
@@ -16,6 +17,24 @@ mongoose
   .connect(mongoDatabase, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch((error) => console.log("Connexion à MongoDB échouée !" + error));
+
+app.use(
+  express.static(path.join(__dirname, "public"), {
+    maxAge: "1w",
+    setHeaders: function (res, path) {
+      if (
+        path.endsWith(".webp") ||
+        path.endsWith(".png") ||
+        path.endsWith(".jpg") ||
+        path.endsWith(".jpeg") ||
+        path.endsWith(".css") ||
+        path.endsWith(".js")
+      ) {
+        res.setHeader("Cache-Control", "public, max-age=604800");
+      }
+    },
+  })
+);
 
 app.use(cors());
 app.use(express.json());
