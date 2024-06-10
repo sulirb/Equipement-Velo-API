@@ -12,8 +12,8 @@ const optimizeImage = async (req, res, next) => {
       throw new HttpError("Aucun fichier image téléchargé");
     }
 
-    const maxImageWidth = 1200;
-    const maxImageHeight = 600;
+    const maxImageWidth = 1500;
+    const maxImageHeight = 844;
 
     const buffer = await sharp(req.file.path)
       .resize(maxImageWidth, maxImageHeight, {

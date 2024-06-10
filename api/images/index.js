@@ -1,6 +1,5 @@
 const express = require("express");
 const { HttpError } = require("../../middlewares/error.js");
-const Image = require("../../models/Images.js");
 const multer = require("../../middlewares/multer-config-cont.js");
 const optimizeImage = require("../../middlewares/multer-sharp-cont.js");
 const auth = require("../../middlewares/auth.js");
