@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-/*const { JWT_SECRET, JWT_EXPIRE } = require("./env.js");
+const { JWT_SECRET, JWT_EXPIRE } = require("./env.js");
 
-if (!JWT_EXPIRE) throw new Error("JWT_EXPIRE must be set in .env");
+/* (!JWT_EXPIRE) throw new Error("JWT_EXPIRE must be set in .env");
 if (!JWT_SECRET) throw new Error("JWT_SECRET must be set in .env.local");*/
 
 const verify = (token) => jwt.verify(token, JWT_SECRET);
