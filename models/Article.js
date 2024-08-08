@@ -17,7 +17,7 @@ const articlesSchema = mongoose.Schema({
 });
 articlesSchema.pre("validate", function (next) {
   if (this.content) {
-    this.content = htmlPurify.sanitize(this.content);
+    this.content = htmlPurify.sanitize(this.content, { ADD_ATTR: ["target"] });
     this.snippet = stripHtml(this.content.substring(0, 200)).result;
   }
 
