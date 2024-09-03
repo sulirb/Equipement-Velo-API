@@ -1,5 +1,4 @@
 const sharp = require("sharp");
-const fs = require("fs");
 const { HttpError } = require("./error");
 
 const optimizeImage = async (req, res, next) => {
@@ -9,28 +8,32 @@ const optimizeImage = async (req, res, next) => {
     }
 
     if (!req.file) {
-      throw new HttpError("Aucun fichier image téléchargé");
+      throw new HttpError(400, "Aucun fichier image téléchargé");
     }
 
     const maxImageWidth = 1500;
-    const maxImageHeight = 844;
+    const maxImageHeight = 1200;
 
-    const buffer = await sharp(req.file.path)
+    // Utiliser le buffer au lieu du chemin du fichier
+    const buffer = await sharp(req.file.buffer)
       .resize(maxImageWidth, maxImageHeight, {
         fit: sharp.fit.inside,
         withoutEnlargement: true,
       })
       .toBuffer();
 
-    fs.unlinkSync(req.file.path);
-    fs.writeFileSync(`images/content/${req.file.filename}`, buffer);
+    // Remplacer le buffer original par le buffer optimisé
+    req.file.buffer = buffer;
 
     next();
   } catch (error) {
     console.error(error);
-    throw new HttpError(400, {
-      message: "Une erreur s'est produite lors de l'optimisation de l'image",
-    });
+    next(
+      new HttpError(
+        400,
+        "Une erreur s'est produite lors de l'optimisation de l'image"
+      )
+    );
   }
 };
 

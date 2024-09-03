@@ -15,28 +15,22 @@ const unlinkFile = util.promisify(fs.unlink);
 
 let route = express.Router({ mergeParams: true });
 
-route.post("/", auth, multer, optimizeImage, async (req, res) => {
-  const file = req.file;
+route.post("/", auth, multerConfig, optimizeImage, async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
   const selectedFolder = req.body.folder;
-  console.log(file);
-  console.log(selectedFolder);
 
   let result;
   if (selectedFolder === "titre-images") {
-    result = await uploadFileImages(file);
+    result = await uploadFileImages(req.file.buffer, req.file.filename);
   } else if (selectedFolder === "content") {
-    result = await uploadFileContent(file);
+    result = await uploadFileContent(req.file.buffer, req.file.filename);
   } else {
-    throw new HttpError(401, {
-      message: "Erreur dans le dossier",
-    });
+    return res.status(401).json({ error: "Erreur dans le dossier" });
   }
 
-  // apply filter
-  // resize
-  await unlinkFile(file.path);
-  console.log(result);
-  const description = req.body.description;
   res.send({ link: result.Location });
 });
 
