@@ -19,6 +19,5 @@
       "src": "/images/(.*)",
       "dest": "/images/$1"
     }
-  ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
+  ]
 }
