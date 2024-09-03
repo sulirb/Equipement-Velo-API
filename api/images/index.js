@@ -1,5 +1,4 @@
 const express = require("express");
-const { HttpError } = require("../../middlewares/error.js");
 const multer = require("../../middlewares/multer-config-cont.js");
 const optimizeImage = require("../../middlewares/multer-sharp-cont.js");
 const auth = require("../../middlewares/auth.js");
@@ -8,14 +7,11 @@ const {
   getFileStream,
   uploadFileImages,
 } = require("../../managers/s3.js");
-const fs = require("fs");
-const util = require("util");
 const { getMimeTypeFromKey } = require("../../managers/getMimeTypeFromKey.js");
-const unlinkFile = util.promisify(fs.unlink);
 
 let route = express.Router({ mergeParams: true });
 
-route.post("/", auth, multerConfig, optimizeImage, async (req, res) => {
+route.post("/", auth, multer, optimizeImage, async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
