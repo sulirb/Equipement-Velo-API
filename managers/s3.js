@@ -32,14 +32,12 @@ exports.uploadFileImages = uploadFileImages;
 
 // uploads a file to s3 content folder
 
-function uploadFileContent(file) {
-  const fileStream = fs.createReadStream(file.path);
-
+function uploadFileContent(fileBuffer, fileName, mimeType) {
   const uploadParams = {
     Bucket: bucketName,
-    Body: fileStream,
-    Key: `content/${file.filename}`,
-    ContentType: file.mimetype,
+    Body: fileBuffer,
+    Key: `content/${fileName}`,
+    ContentType: mimeType,
     ACL: "public-read",
   };
   return s3.upload(uploadParams).promise();

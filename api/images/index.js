@@ -16,17 +16,24 @@ route.post("/", auth, multer, optimizeImage, async (req, res) => {
     return res.status(400).json({ error: "No file uploaded" });
   }
 
+  const file = req.file;
   const selectedFolder = req.body.folder;
+  console.log(file);
+  console.log(selectedFolder);
 
   let result;
   if (selectedFolder === "titre-images") {
-    result = await uploadFileImages(req.file.buffer, req.file.filename);
+    result = await uploadFileImages(file.buffer, file.filename, file.mimetype);
   } else if (selectedFolder === "content") {
-    result = await uploadFileContent(req.file.buffer, req.file.filename);
+    result = await uploadFileContent(file.buffer, file.filename, file.mimetype);
   } else {
-    return res.status(401).json({ error: "Erreur dans le dossier" });
+    throw new HttpError(401, {
+      message: "Erreur dans le dossier",
+    });
   }
 
+  console.log(result);
+  const description = req.body.description;
   res.send({ link: result.Location });
 });
 
