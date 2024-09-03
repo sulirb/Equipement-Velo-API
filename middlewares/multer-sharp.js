@@ -1,5 +1,4 @@
 const sharp = require("sharp");
-const fs = require("fs");
 const { HttpError } = require("./error");
 
 const optimizeImage = async (req, res, next) => {
@@ -13,17 +12,16 @@ const optimizeImage = async (req, res, next) => {
     }
 
     const maxImageWidth = 1500;
-    const maxImageHeight = 844;
+    const maxImageHeight = 1200;
 
-    const buffer = await sharp(req.file.path)
+    const buffer = await sharp(req.file.buffer)
       .resize(maxImageWidth, maxImageHeight, {
         fit: sharp.fit.inside,
         withoutEnlargement: true,
       })
       .toBuffer();
 
-    fs.unlinkSync(req.file.path);
-    fs.writeFileSync(`images/title/${req.file.filename}`, buffer);
+    req.file.buffer = buffer;
 
     next();
   } catch (error) {

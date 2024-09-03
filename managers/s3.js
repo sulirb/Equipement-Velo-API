@@ -15,14 +15,12 @@ const s3 = new S3({
 
 // uploads a file to s3 images folder
 
-function uploadFileImages(file) {
-  const fileStream = fs.createReadStream(file.path);
-
+function uploadFileImages(fileBuffer, fileName, mimeType) {
   const uploadParams = {
     Bucket: bucketName,
-    Body: fileStream,
-    Key: `titre-images/${file.filename}`,
-    ContentType: file.mimetype,
+    Body: fileBuffer,
+    Key: `titre-images/${fileName}`,
+    ContentType: mimeType,
     ACL: "public-read",
   };
   return s3.upload(uploadParams).promise();

@@ -5,9 +5,6 @@ const multer = require("../../middlewares/multer-config.js");
 const optimizeImage = require("../../middlewares/multer-sharp.js");
 const auth = require("../../middlewares/auth.js");
 const { uploadFileImages } = require("../../managers/s3.js");
-const fs = require("fs");
-const util = require("util");
-const unlinkFile = util.promisify(fs.unlink);
 
 let route = express.Router({ mergeParams: true });
 
@@ -117,8 +114,11 @@ route.get("/perPage", async (req, res) => {
 route.post("/", auth, multer, optimizeImage, async (req, res) => {
   const articleObject = req.body;
   const file = req.file;
-  const result = await uploadFileImages(file);
-  await unlinkFile(file.path);
+  const result = await uploadFileImages(
+    file.buffer,
+    file.filename,
+    file.mimetype
+  );
   console.log(result);
   const fileUrl = result.Location;
 
@@ -126,7 +126,6 @@ route.post("/", auth, multer, optimizeImage, async (req, res) => {
   const article = new Article({
     ...articleObject,
     file: fileUrl,
-    imagePath: `/titre-images/${result.Key}`,
   });
 
   await article.save().catch(() => {
